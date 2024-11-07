@@ -1,0 +1,79 @@
+﻿@page "/User"
+@using BlazorLabb.Models
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Användare</title>
+	</head>
+<body>
+
+@if (!isSubmited)
+{
+	<EditForm FormName="AddUser" Model="Person" OnValidSubmit="HandleSubmit">
+		<fieldset>
+			<legend>Lägg till användare</legend>
+			<div>
+				<label>Namn:</label>
+				<InputText @bind-Value="Person.Name" />
+			</div>
+			<div>
+				<label>Epost:</label>
+				<InputText @bind-Value="Person.Email" />
+			</div>
+			<div>
+				<label>Gatuadress:</label>
+				<InputText @bind-Value="Person.Adress.Street" />
+			</div>
+			<div>
+				<label>Postort:</label>
+				<InputText @bind-Value="Person.Adress.City" />
+			</div>
+			<div>
+				<label>Postnummer:</label>
+				<InputText @bind-Value="Person.Adress.ZipCode" />
+			</div>
+			<div>
+				<label>Företagsnamn:</label>
+				<InputText @bind-Value="Person.Company.Name" />
+			</div>
+			<div>
+				<label>Slogan:</label>
+				<InputText @bind-Value="Person.Company.CatchPhrase" />
+			</div>
+			<div>
+				<label>&nbsp;</label>
+				<input type="submit" value="Spara" class="submit"/>
+			</div>
+		</fieldset>
+	</EditForm>
+}
+else
+{
+	<p>Här är dina sparade uppgifter!</p>
+	<ul>
+		<li>Id: @Person.Id</li>
+		<li>Namn: @Person.Name</li>
+		<li>Epost: @Person.Email</li>
+		<li>Adress: @Person.Adress.Street</li>
+		<li>Postort: @Person.Adress.City</li>
+		<li>Postnummer: @Person.Adress.ZipCode</li>
+		<li>Företagsnamn: @Person.Company.Name</li>
+		<li>Slogan: @Person.Company.CatchPhrase</li>
+	</ul>
+}
+</body>
+</html>
+
+@code {
+	private bool isSubmited = false;
+
+	[SupplyParameterFromForm]
+	public Person Person { get; set; } = new Person();
+
+	private void HandleSubmit()
+	{
+		Person.Id = 1;
+		isSubmited = true;
+	}
+}
