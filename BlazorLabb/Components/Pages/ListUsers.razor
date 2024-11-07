@@ -1,0 +1,61 @@
+﻿@page "/ListUsers"
+@using BlazorLabb.Data
+@using BlazorLabb.Models
+<h3>ListUsers</h3>
+
+@if (isLoading)
+{
+	<p>Hämtar alla användare...</p>
+}
+else
+{
+	@foreach (var user in DisplayUsers)
+	{
+		<ul>
+			<li><strong>Id:</strong> @user.Id</li>
+			<li><strong>Namn:</strong> @user.Name</li>
+			<li><strong>E-post:</strong> @user.Email</li>
+			<li><strong>Gatuadress:</strong> @user.Adress?.Street</li>
+			<li><strong>Postnummer:</strong> @user.Adress?.ZipCode</li>
+			<li><strong>Postort:</strong> @user.Adress?.City</li>
+			<li><strong>Företagsnamn:</strong> @user.Company?.Name</li>
+			<li><strong>Slogan:</strong> @user.Company?.CatchPhrase</li>
+		</ul>
+	}
+	
+	<button @onclick="ShowAllUsers">Visa alla användare</button>
+	
+}
+
+@code {
+
+	private bool isLoading = true;
+	private IEnumerable<Person> DisplayUsers = new List<Person>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			await Task.Delay(5000);
+			GetUserQuery getUserQuery = new GetUserQuery();
+			List<Person> persons = getUserQuery.Execute();
+
+			var users = from user in persons
+						orderby user.Name
+						select user;
+
+			 DisplayUsers = users.Take(5);
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
+
+	private async Task ShowAllUsers()
+    {
+		GetUserQuery getUserQuery = new GetUserQuery();
+		DisplayUsers = getUserQuery.Execute();
+       
+    }
+}
