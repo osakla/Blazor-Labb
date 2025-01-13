@@ -55,7 +55,7 @@ namespace BlazorLabb.Data
                 }
             };
 
-            return persons;
+            return persons.OrderBy(x => x.Name).ToList();
         }
     }
 }
